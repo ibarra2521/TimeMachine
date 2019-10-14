@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentResponse(response: HomeUseCases.Fetch.Response)
+    func presentNClosest(response: HomeUseCases.Algorithm.Response)
 }
 
 class HomePresenter: HomePresentationLogic {
@@ -17,9 +18,14 @@ class HomePresenter: HomePresentationLogic {
     // MARK: - Properties
     weak var viewController: HomeDisplayLogic?
     
-    // MARK: -
+    // MARK: - HomePresentationLogic Implementations
     func presentResponse(response: HomeUseCases.Fetch.Response) {
         let viewModel = HomeUseCases.Fetch.ViewModel(prize: response.prize)
         viewController?.displayData(viewModel: viewModel)
-    }    
+    }
+    
+    func presentNClosest(response: HomeUseCases.Algorithm.Response) {
+        let viewModel = HomeUseCases.Algorithm.ViewModel(prize: response.prize)
+        viewController?.showNClosest(viewModel: viewModel)
+    }
 }

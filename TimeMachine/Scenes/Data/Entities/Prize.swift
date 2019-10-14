@@ -10,6 +10,7 @@ import Foundation
 
 struct Prize: Codable {
     
+    // MARK: - Enum
     enum CodingKeys: String, CodingKey {
         case diedcity
         case borncountry
@@ -30,6 +31,7 @@ struct Prize: Codable {
         case gender
     }
     
+    // MARK: - Properties
     var diedcity: String?
     var borncountry: String?
     var country: String?
@@ -49,6 +51,7 @@ struct Prize: Codable {
     var gender: String?
     var cost: Double?
     
+    // MARK: - Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         diedcity = try? container.decodeIfPresent(String.self, forKey: .diedcity)

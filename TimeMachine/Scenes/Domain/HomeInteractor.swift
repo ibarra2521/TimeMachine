@@ -14,47 +14,43 @@ enum NetworkError: Error {
 }
 
 typealias PrizeResponseHandler = (_ error: Error?, _ prize: [Prize]?) -> ()
-//typealias PrizeResponse = (Result<[Prize], NetworkError>) -> ()
 typealias PrizeResponse = (Result<[Prize], NetworkError>) -> ()
 
 protocol HomeBusinessLogic {
     func doFetch(request: HomeUseCases.Fetch.Request)
+    func applyAlgorithm(request: HomeUseCases.Algorithm.Request)
 }
 
-protocol HomeDataStore {
-    //var name: String { get set }
-}
-
-class HomeInteractor: HomeBusinessLogic, HomeDataStore {
+class HomeInteractor: HomeBusinessLogic {
     
     // MARK: - Properties
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
-    //var name: String = ""
     
-    // MARK: -
+    // MARK: - HomeBusinessLogic implementation
     func doFetch(request: HomeUseCases.Fetch.Request) {
         worker = HomeWorker()
-        //worker?.fetchingData()
-        
-        //worker?.fetchingData(completionHandler: { (error: Error?, prize: [Prize]?) in
         worker?.fetchingData(completionHandler: { prize in
             switch prize {
             case .success(let prizes):
-                //print("prizes almost: \(prizes)")
                 let response = HomeUseCases.Fetch.Response(prize: prizes)
-                //print("response sending to presenter: \(response)")
                 self.presenter?.presentResponse(response: response)
             case .failure:
                 print("FAILED")
             }
-//            if let error = error {
-//                
-//            } else if let products = prize {
-//                let response = HomeUseCases.Fetch.Response()
-//                print("response sending to presenter: \(response)")
-//                self.presenter?.presentResponse(response: response)
-//            }
+        })
+    }
+    
+    func applyAlgorithm(request: HomeUseCases.Algorithm.Request) {
+        worker = HomeWorker()
+        worker?.gettingNClosest(request: request, completionHandler: { prize in
+            switch prize {
+            case .success(let prizes):
+                let response = HomeUseCases.Algorithm.Response(prize: prizes)
+                self.presenter?.presentNClosest(response: response)
+            case .failure:
+                print("FAILED")
+            }
         })
     }
 }

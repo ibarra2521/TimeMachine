@@ -10,14 +10,17 @@ import Foundation
 
 struct Location: Codable {
     
+    // MARK: - Enum
     enum CodingKeys: String, CodingKey {
         case lat
         case lng
     }
     
+    // MARK: - Properties
     var lat: Double?
     var lng: Double?
     
+    // MARK: - Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         lat = try? container.decodeIfPresent(Double.self, forKey: .lat)

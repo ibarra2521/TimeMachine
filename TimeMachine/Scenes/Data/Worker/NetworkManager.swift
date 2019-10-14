@@ -1,21 +1,12 @@
 //
-//  HomeWorker.swift
+//  NetworkManager.swift
 //  TimeMachine
 //
-//  Created by Nick Ibarra on 12/10/19.
-//  Copyright (c) 2019 Nick iOS. All rights reserved.
+//  Created by Nick Ibarra on 14/10/19.
+//  Copyright © 2019 Nick iOS. All rights reserved.
 //
 
-import UIKit
-
-class HomeWorker {
-    let netowrk = NetworkManager.shared
-    func fetchingData(completionHandler: @escaping PrizeResponse) {
-        netowrk.getPrize(completionHandler: { prize in
-            completionHandler(prize)
-        })
-    }
-}
+import Foundation
 
 class NetworkManager {
     static let shared = NetworkManager()
@@ -29,7 +20,7 @@ class NetworkManager {
                 return
             }
             do {
-                let data = try? JSONDecoder().decode([Prize].self, from: data)//GENERIC
+                let data = try? JSONDecoder().decode([Prize].self, from: data)
                 if let prizeData = data {
                     completionHandler(.success(prizeData))
                 } else {
@@ -39,7 +30,7 @@ class NetworkManager {
         })
     }
     
-    private func makeLocalAWebserviceCall(fileName: String, completion: @escaping (_ jsonDataResponse: Data?, _ error: Error?) -> ()) {//OTHER RESULT<>
+    private func makeLocalAWebserviceCall(fileName: String, completion: @escaping (_ jsonDataResponse: Data?, _ error: Error?) -> ()) {
         if let path = Bundle(for: type(of: self)).path(forResource: fileName, ofType: "json") {
             do {
                 let fileUrl = URL(fileURLWithPath: path)

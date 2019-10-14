@@ -23,4 +23,22 @@ enum HomeUseCases {
             let prize: [Prize]
         }
     }
+    
+    // MARK: - Algorithm
+    enum Algorithm {
+        struct Request {
+            let totalPrize: [Prize]
+            let year: String
+            let latitude: Double
+            let longitude: Double
+        }
+        
+        struct Response {
+            let prize: [Prize]
+        }
+        
+        struct ViewModel {
+            let prize: [Prize]
+        }
+    }
 }

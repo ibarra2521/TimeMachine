@@ -7,190 +7,161 @@
 //
 
 import UIKit
-import CoreLocation
+import MapKit
+//import CoreLocation
 
 protocol HomeDisplayLogic: class {
     func displayData(viewModel: HomeUseCases.Fetch.ViewModel)
+    func showNClosest(viewModel: HomeUseCases.Algorithm.ViewModel)
+}
+
+struct Constant {
+    // MARK: - Ints
+    static let min = 1900
+    static let max = 2020
+    static let closest = 20
+
+    // MARK: - Doubles
+    static let latMin = -85.0
+    static let latMax = 85.0
+    static let lngMin = -180.0
+    static let lngMax = 180.0
+    
+    // MARK: - Strings
+    static let cellIdentifier = "PrizeCell"
+    static let cellEmptyIdentifier = "EmptyCell"
+    
+    // MARK: - Struct for default values
+    struct Defautl {
+        static let lat = 52.2042666
+        static let lng = 0.1149085
+        static let year = 2010
+        static let regionRadius = 1000.0
+        static let rowHeight: CGFloat = 300.0
+    }
 }
 
 class HomeViewController: UIViewController, HomeDisplayLogic {
     
-    
-    struct Constant {
-        static let min = 1900
-        static let max = 2020
-    }
-    
     // MARK: - Properties
     var interactor: HomeBusinessLogic?
-    var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     var totalPrize = [Prize]()
     var arrayYear = [[Prize]]()
+    var finalArray = [Prize]()
+    let k = Constant.self
     
     // MARK: - IBOutlets
-    
-    // MARK: - Object lifecycle
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-    
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var homeTableView: UITableView!
+    @IBOutlet weak var latitude: UITextField!
+    @IBOutlet weak var longitude: UITextField!
+    @IBOutlet weak var stepper: UIStepper!
+    @IBOutlet weak var yearValue: UILabel!
+        
     // MARK: - Setup
     private func setup() {
         let viewController = self
         let interactor = HomeInteractor()
         let presenter = HomePresenter()
-        let router = HomeRouter()
         viewController.interactor = interactor
-        viewController.router = router
         interactor.presenter = presenter
         presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+    }
+        
+    // MARK: - View lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initialize()
     }
     
-    // MARK: - Routing
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
+    private func setupUIControls() {
+        stepper.wraps = true
+        stepper.autorepeat = true
+        stepper.minimumValue = Double(k.min)
+        stepper.maximumValue = Double(k.max)
+        stepper.value = Double(k.Defautl.year)
+    }
+    
+    // MARK: - IBActions
+    @IBAction func search(_ sender: Any) {
+        if totalPrize.count > 0 {
+            guard let lat = latitude.text, let lng = longitude.text, lat.isNumeric, lng.isNumeric, let latitude = Double(lat), let longitude = Double(lng) else { return }
+            let year = Int(stepper.value)
+            if (latitude >= k.latMin && latitude <= k.latMax) && (longitude >= k.lngMin && longitude <= k.lngMax) {
+                doAlgorithm(year: "\(year)", latitude: latitude, longitude: longitude)
+            } else {
+                print("Out from limits")
             }
         }
     }
     
-    // MARK: - View lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        loadData()
+    @IBAction func changeYear(_ sender: UIStepper) {
+        yearValue.text = "Year: \(Int(sender.value).description)" 
     }
-    
 }
 
 // MARK: - Extensions
 extension HomeViewController {
-    // MARK: -
+    // MARK: - Load JSON
     func loadData() {
         let request = HomeUseCases.Fetch.Request()
         interactor?.doFetch(request: request)
     }
-
+    
+    // MARK: - Initialize
+    private func initialize() {
+        setupTableView()
+        setupUIControls()
+        setup()
+        loadData()
+        hideKeyboard()
+    }
+    
+    // MARK: - Setup TableView
+    private func setupTableView() {
+        homeTableView.rowHeight = UITableView.automaticDimension
+        homeTableView.estimatedRowHeight = k.Defautl.rowHeight
+        homeTableView.tableFooterView = UIView(frame: .zero)
+        homeTableView.register(UINib(nibName: k.cellIdentifier, bundle: nil), forCellReuseIdentifier: k.cellIdentifier)
+        homeTableView.register(UINib(nibName: k.cellEmptyIdentifier, bundle: nil), forCellReuseIdentifier: k.cellEmptyIdentifier)
+        homeTableView.reloadData()
+    }
+    
+    // MARK: - Implemented HomeDisplayLogic protocol
+    func doAlgorithm(year: String, latitude: Double, longitude: Double) {
+        let request = HomeUseCases.Algorithm.Request(totalPrize: totalPrize, year: year, latitude: latitude, longitude: longitude)
+        interactor?.applyAlgorithm(request: request)
+    }
+    
     // MARK: - Implemented HomeDisplayLogic protocol
     func displayData(viewModel: HomeUseCases.Fetch.ViewModel) {
-        print("final step viewModel: \(viewModel.prize.count)")
-        //print("final step viewModel: \(viewModel.prize)")
         totalPrize = viewModel.prize
-        algorithm()
+        let kDf = k.Defautl.self
+        latitude.text = "\(kDf.lat)"
+        longitude.text = "\(kDf.lng)"
+        setDefaultPin(location: CLLocation(latitude: kDf.lat, longitude: kDf.lng))
+        homeTableView.reloadData()
+    }
+    
+    // MARK: - Implemented HomeDisplayLogic protocol
+    func showNClosest(viewModel: HomeUseCases.Algorithm.ViewModel) {
+        finalArray = viewModel.prize
+        homeTableView.reloadData()
     }
 }
 
 extension HomeViewController {
-    func algorithm() {
-        let year = "2010"//Int("2010")
-        let yearInt = Int("\(year)")
-        let latitude = 52.2042666
-        let longitude = 0.1149085
+    func setDefaultPin(location: CLLocation) {
+        let start = MKPointAnnotation()
+        start.title = "Point start"
+        start.coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude , longitude: location.coordinate.longitude)
+        mapView.addAnnotation(start)
+        centerMapOnLocation(location: location)
+    }
         
-        arrayYear = getArrayByYear(yearInt ?? 0)
-        for (idx, var year) in arrayYear.enumerated() {
-            for (index, prize) in year.enumerated() {
-                let loc = prize.location
-                guard let lat = loc?.lat, let long = loc?.lng else { return }
-                let distance = getDistance(origin: CLLocation(latitude: latitude, longitude: longitude), destination: CLLocation(latitude: lat, longitude: long))
-                let costDistance = getKmCost(km: distance)
-                let yearCost = getYearCost(currentYear: yearInt ?? 0, newYear: Int(prize.year ?? "0") ?? 0)
-                year[index].cost = costDistance + yearCost
-            }
-            arrayYear[idx] = year
-        }
-
-        // merged bi array to single array (merged)
-        var arrayWithCost = [Prize]()
-        arrayYear.forEach { array in
-            arrayWithCost.append(contentsOf: array)
-        }
-
-        //The algorithm for order
-        let arrayOrder = arrayWithCost.sorted { Int($0.cost ?? 0) < Int($1.cost ?? 0) }
-        let firstItems = arrayOrder.prefix(20)
-        
-        // Print the first 20's
-        for prize in firstItems {
-            print("COST: \(String(describing: prize.cost)) - year: \(String(describing: prize.year)) - category: \(String(describing: prize.category))")
-        }
-        
+    func centerMapOnLocation(location: CLLocation) {
+        let regionRadius: CLLocationDistance = k.Defautl.regionRadius
+        let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+      mapView.setRegion(coordinateRegion, animated: true)
     }
-    
-    func getArrayByYear(filter year: String) -> [Prize] {
-        let array = totalPrize.filter { $0.year == year }
-        return array
-    }
-    
-    func getDistance(origin: CLLocation, destination: CLLocation) -> Double {
-        let kmDistance = origin.distance(from: destination)/1000
-        //print("kilometerDistance: \(kmDistance)")
-        return kmDistance
-    }
-    
-    func getKmCost(km: Double, defaultCost: Double = 10) -> Double {//let cost = km/defaultCost/2
-        km/defaultCost/2
-    }
-    
-    func getYearCost(currentYear: Int, newYear: Int) -> Double {
-        if (newYear != currentYear) {
-            //let jump = newYear - currentYear
-            let jump = Double(abs(newYear - currentYear))
-            let cost = jump/2
-            //print("cost jumping year: \(cost)")
-            return cost
-        }
-        //print("cost jumping year: \(0.0)")
-        return 0.0
-    }
-    
-    func getArrayByYear(_ yearInt: Int) -> [[Prize]] {
-        var prizesPerYear = [[Prize]]()
-        if isIntoRange(yearInt) {
-            var pastTimeYear = yearInt
-            var futureTimeYear = yearInt
-    
-            let array = getArrayByYear(filter: "\(yearInt)")
-            if array.count > 0 {
-                prizesPerYear.append(array)
-            }
-            pastTimeYear -= 1
-            if isIntoRange(pastTimeYear) {// Back
-                while isIntoRange(pastTimeYear) {
-                    let arrayPrizeByYear = getArrayByYear(filter: "\(pastTimeYear)")
-                    if arrayPrizeByYear.count > 0 {
-                        prizesPerYear.append(arrayPrizeByYear)
-                    }
-                    pastTimeYear -= 1
-                }
-            }
-            futureTimeYear += 1
-            if isIntoRange(futureTimeYear) {// Fordward
-                while isIntoRange(futureTimeYear) {
-                    let arrayPrizeByYear = getArrayByYear(filter: "\(futureTimeYear)")
-                    if arrayPrizeByYear.count > 0 {
-                        prizesPerYear.append(arrayPrizeByYear)
-                    }
-                    futureTimeYear += 1
-                }
-            }
-            print("prizesPerYear.count: \(prizesPerYear.count)")
-            return prizesPerYear
-        }
-        return [[]]
-    }
-    
-    func isIntoRange(_ yearInt: Int) -> Bool {
-        yearInt >= Constant.min && yearInt <= Constant.max ? true : false
-    }
-    
 }
