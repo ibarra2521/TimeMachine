@@ -12,6 +12,17 @@
 		F3D3B5F523525BA000E1E66B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3D3B5F423525BA000E1E66B /* Assets.xcassets */; };
 		F3D3B5F823525BA000E1E66B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3D3B5F623525BA000E1E66B /* LaunchScreen.storyboard */; };
 		F3D3B60323525BA000E1E66B /* TimeMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B60223525BA000E1E66B /* TimeMachineTests.swift */; };
+		F3D3B61523526A3800E1E66B /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B60E23526A3800E1E66B /* HomePresenter.swift */; };
+		F3D3B61623526A3800E1E66B /* HomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B60F23526A3800E1E66B /* HomeWorker.swift */; };
+		F3D3B61723526A3800E1E66B /* HomeUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B61023526A3800E1E66B /* HomeUseCases.swift */; };
+		F3D3B61823526A3800E1E66B /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B61123526A3800E1E66B /* HomeRouter.swift */; };
+		F3D3B61923526A3800E1E66B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B61223526A3800E1E66B /* HomeViewController.swift */; };
+		F3D3B61A23526A3800E1E66B /* HomeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B61323526A3800E1E66B /* HomeInteractor.swift */; };
+		F3D3B61B23526A3800E1E66B /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3D3B61423526A3800E1E66B /* HomeViewController.xib */; };
+		F3D3B62123526BF900E1E66B /* Prize.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B62023526BF900E1E66B /* Prize.swift */; };
+		F3D3B62323526C4200E1E66B /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B62223526C4200E1E66B /* Location.swift */; };
+		F3D3B62623526D7200E1E66B /* nobel-prize-laureates.json in Resources */ = {isa = PBXBuildFile; fileRef = F3D3B62523526D7200E1E66B /* nobel-prize-laureates.json */; };
+		F3D3B62923529EB200E1E66B /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D3B62823529EB200E1E66B /* Loading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +45,17 @@
 		F3D3B5FE23525BA000E1E66B /* TimeMachineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimeMachineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D3B60223525BA000E1E66B /* TimeMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineTests.swift; sourceTree = "<group>"; };
 		F3D3B60423525BA000E1E66B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3D3B60E23526A3800E1E66B /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
+		F3D3B60F23526A3800E1E66B /* HomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWorker.swift; sourceTree = "<group>"; };
+		F3D3B61023526A3800E1E66B /* HomeUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCases.swift; sourceTree = "<group>"; };
+		F3D3B61123526A3800E1E66B /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
+		F3D3B61223526A3800E1E66B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		F3D3B61323526A3800E1E66B /* HomeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractor.swift; sourceTree = "<group>"; };
+		F3D3B61423526A3800E1E66B /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		F3D3B62023526BF900E1E66B /* Prize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prize.swift; sourceTree = "<group>"; };
+		F3D3B62223526C4200E1E66B /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		F3D3B62523526D7200E1E66B /* nobel-prize-laureates.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "nobel-prize-laureates.json"; sourceTree = "<group>"; };
+		F3D3B62823529EB200E1E66B /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,10 +97,12 @@
 		F3D3B5EA23525B9F00E1E66B /* TimeMachine */ = {
 			isa = PBXGroup;
 			children = (
+				F3D3B62423526D4F00E1E66B /* Common */,
 				F3D3B5EB23525B9F00E1E66B /* AppDelegate.swift */,
 				F3D3B5ED23525B9F00E1E66B /* SceneDelegate.swift */,
 				F3D3B5F423525BA000E1E66B /* Assets.xcassets */,
 				F3D3B5F623525BA000E1E66B /* LaunchScreen.storyboard */,
+				F3D3B60D2352659F00E1E66B /* Scenes */,
 				F3D3B5F923525BA000E1E66B /* Info.plist */,
 			);
 			path = TimeMachine;
@@ -91,6 +115,71 @@
 				F3D3B60423525BA000E1E66B /* Info.plist */,
 			);
 			path = TimeMachineTests;
+			sourceTree = "<group>";
+		};
+		F3D3B60D2352659F00E1E66B /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B61E23526A5300E1E66B /* Presentation */,
+				F3D3B61D23526A4900E1E66B /* Domain */,
+				F3D3B61C23526A3F00E1E66B /* Data */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		F3D3B61C23526A3F00E1E66B /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B61F23526BE800E1E66B /* Entities */,
+				F3D3B60F23526A3800E1E66B /* HomeWorker.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F3D3B61D23526A4900E1E66B /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B60E23526A3800E1E66B /* HomePresenter.swift */,
+				F3D3B61323526A3800E1E66B /* HomeInteractor.swift */,
+				F3D3B61023526A3800E1E66B /* HomeUseCases.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		F3D3B61E23526A5300E1E66B /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B61223526A3800E1E66B /* HomeViewController.swift */,
+				F3D3B61423526A3800E1E66B /* HomeViewController.xib */,
+				F3D3B61123526A3800E1E66B /* HomeRouter.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		F3D3B61F23526BE800E1E66B /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B62023526BF900E1E66B /* Prize.swift */,
+				F3D3B62223526C4200E1E66B /* Location.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		F3D3B62423526D4F00E1E66B /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B62723529E9800E1E66B /* Views */,
+				F3D3B62523526D7200E1E66B /* nobel-prize-laureates.json */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		F3D3B62723529E9800E1E66B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F3D3B62823529EB200E1E66B /* Loading.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,8 +263,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3D3B62623526D7200E1E66B /* nobel-prize-laureates.json in Resources */,
 				F3D3B5F823525BA000E1E66B /* LaunchScreen.storyboard in Resources */,
 				F3D3B5F523525BA000E1E66B /* Assets.xcassets in Resources */,
+				F3D3B61B23526A3800E1E66B /* HomeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,7 +284,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3D3B61523526A3800E1E66B /* HomePresenter.swift in Sources */,
+				F3D3B61823526A3800E1E66B /* HomeRouter.swift in Sources */,
+				F3D3B62323526C4200E1E66B /* Location.swift in Sources */,
+				F3D3B62923529EB200E1E66B /* Loading.swift in Sources */,
+				F3D3B61723526A3800E1E66B /* HomeUseCases.swift in Sources */,
+				F3D3B61A23526A3800E1E66B /* HomeInteractor.swift in Sources */,
 				F3D3B5EC23525B9F00E1E66B /* AppDelegate.swift in Sources */,
+				F3D3B61623526A3800E1E66B /* HomeWorker.swift in Sources */,
+				F3D3B61923526A3800E1E66B /* HomeViewController.swift in Sources */,
+				F3D3B62123526BF900E1E66B /* Prize.swift in Sources */,
 				F3D3B5EE23525B9F00E1E66B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
